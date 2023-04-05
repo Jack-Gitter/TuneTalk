@@ -1,0 +1,24 @@
+{
+  "name": "cs-4550-group-16-node",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "start": "node app.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mrussell246/CS-4550-Group-16-node.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/mrussell246/CS-4550-Group-16-node/issues"
+  },
+  "homepage": "https://github.com/mrussell246/CS-4550-Group-16-node#readme",
+  "dependencies": {
+    "express": "^4.18.2"
+  }
+}
