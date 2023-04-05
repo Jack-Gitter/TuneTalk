@@ -1,5 +1,4 @@
-import p from './posts.js'
-let posts = p
+import * as dao from '../../dao/dao.js'
 
 export const postController = (app) => {
     
@@ -34,40 +33,40 @@ export const postController = (app) => {
         review 
 */
 
-const createPost = (req, res) => {
+const createPost = async (req, res) => {
     const newPost = req.body;
-    newPost._id = (new Date()).getTime()+''
     newPost.likes = 0;
-    posts.push(newPost);
-    res.json(newPost);
+    const status = await dao.createPost(newPost)
+    res.json(status);
 }
 
 // Gets a post from the datbase with the provided postID as a parameter 
-const getPost = (req, res) => {
+const getPost = async (req, res) => {
     const postID = req.params.pid
-    const post = posts.find((post) => post._id === postID)
+    const post = await dao.getPost(postID)
     res.json(post)
 }
 
 // retrieves all posts in the database
-const getAllPosts = (req, res) => {
-    res.json(posts);
+const getAllPosts = async (req, res) => {
+    const posts = await dao.getAllPosts()
+    res.json(posts)
 }
 
 /* 
     Updates a post in the database with the provided postID as a parameter
     The changes are sent in the body of the HTTP request 
 */
-const updatePost = (req, res) => {
+const updatePost = async (req, res) => {
     const postID = req.params.pid
     const changes = req.body;
-    posts = posts.map((post) => post._id === postID ? {...post, ...changes} : post)
-    res.sendStatus(200);
+    const status = await dao.updatePost(postID, changes)
+    res.sendStatus(status);
 }
 
 // Deletes a post in the database with the provided postID as a parameter
-const deletePost = (req, res) => {
+const deletePost = async (req, res) => {
     const postID = req.params.pid
-    posts = posts.filter((post) => post._id !== postID);
-    res.sendStatus(200);
+    const status = await dao.deletePost(postID)
+    res.sendStatus(status);
 }
