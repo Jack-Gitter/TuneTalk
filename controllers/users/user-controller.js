@@ -19,7 +19,7 @@ export const userController = (app) => {
     app.put('/api/update-user-by-id/:uid', updateUserById)
     //
     // updates a user with a specific user id
-    app.put('/api/update-user-by-username/:username', updateUserById)
+    app.put('/api/update-user-by-username/:username', updateUserByUsername)
     
     // deletes a user with a specific user id
     app.delete('/api/delete-user-by-id/:uid', deleteUserById)
