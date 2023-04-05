@@ -1,6 +1,4 @@
-import u from './users.js'
-let users = u
-
+import * as dao from '../../dao/dao.js'
 export const userController = (app) => {
     
     // create a new user 
@@ -38,64 +36,65 @@ export const userController = (app) => {
         isAdmin
 */
 
-const createUser = (req, res) => {
+const createUser = async (req, res) => {
     const newUser = req.body;
-    newUser._id = (new Date()).getTime()+''
     newUser.followers = []
     newUser.following = []
     newUser.likedPosts = []
     newUser.posts = []
-    users.push(newUser)
-    res.json(newUser);
+    const status = await dao.createUser(newUser)
+    res.json(status);
 }
 
 
 // Gets a user with the given user id
-const getUserByID = (req, res) => {
+const getUserByID = async (req, res) => {
     const userID = req.params.uid
-    const user = users.find((user) => user._id === userID)
+    const user = await dao.getUserByID(userID)
     res.json(user)
 }
 
-const getUserByUsername = (req, res) => {
+const getUserByUsername = async (req, res) => {
     const username = req.params.username
-    const user = users.find((user) => user.username === username)
+    const user = await dao.getUserByUsername(username)
     res.json(user)
 }
 
 // Gets all users 
-const getAllUsers = (req, res) => {
+const getAllUsers = async (req, res) => {
+    const users = await dao.getAllUsers()
     res.json(users)
+
 }
 
 /* 
     Updates a user in the database with the provided userID as a parameter
     The changes are sent in the body of the HTTP request 
 */
-const updateUserById = (req, res) => {
+const updateUserById = async (req, res) => {
     const userID = req.params.uid
     const updates = req.body
-    users = users.map((user) => user._id === userID ? {...user, ...updates} : user)
-    res.sendStatus(200);
+    const status = await dao.updateUserById(userID, updates)
+    res.sendStatus(status);
 }
 
-const updateUserByUsername = (req, res) => {
+const updateUserByUsername = async (req, res) => {
     const username = req.params.username
     const updates = req.body
-    users = users.map((user) => user.username === username ? {...user, ...updates} : user)
-    res.sendStatus(200);
+    const status = await dao.updateUserByUsername(username, updates)
+    res.sendStatus(status);
 }
 
 // Deletes a user in the database with the provided postID as a parameter
-const deleteUserById = (req, res) => {
+const deleteUserById = async (req, res) => {
     const userID = req.params.uid
-    users = users.filter((user) => user._id !== userID)
-    res.sendStatus(200);
+    const status = await dao.deleteUserById(userID)
+    res.sendStatus(status);
 }
 //
 // Deletes a user in the database with the provided postID as a parameter
-const deleteUserByUsername = (req, res) => {
+const deleteUserByUsername = async (req, res) => {
     const username = req.params.username
-    users = users.filter((user) => user.username !== username)
-    res.sendStatus(200);
+    const status = await dao.deleteUserByUsername(username)
+    res.sendStatus(status);
 }
