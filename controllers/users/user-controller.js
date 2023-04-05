@@ -96,5 +96,5 @@ const deleteUserById = async (req, res) => {
 const deleteUserByUsername = async (req, res) => {
     const username = req.params.username
     const statusObj = await dao.deleteUserByUsername(username)
-    res.sendStatus(statusObj);
+    res.json(statusObj);
 }

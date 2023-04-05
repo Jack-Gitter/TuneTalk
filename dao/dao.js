@@ -36,7 +36,7 @@ export const getAllUsers = async() => {
    return usersModel.find() 
 }
 
-export const getUser = async(userID) => {
+export const getUserByID = async(userID) => {
     return usersModel.find({_id: userID})
 }
 
