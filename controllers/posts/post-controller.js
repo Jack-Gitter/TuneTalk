@@ -25,13 +25,13 @@ export const postController = (app) => {
     Returns the newly inserted post in JSON form
     The following fields are assumed to be included in the body of the post request: 
         songTitle
-        Username
-        Artists
-        Genre
-        Album Art
-        SpotifyURI
-        SpotifyID
-        Review 
+        username
+        artists
+        genre
+        albumArt
+        spotifyURI
+        spotifyID
+        review 
 */
 
 const createPost = (req, res) => {

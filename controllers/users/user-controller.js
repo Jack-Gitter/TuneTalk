@@ -7,25 +7,34 @@ export const userController = (app) => {
     app.post('/api/create-user', createUser)
 
     // get a user with the provided id
-    app.get('/api/get-user/:uid', getUser)
+    app.get('/api/get-user-by-id/:uid', getUserByID)
     
+    // get a user with the provided username
+    app.get('/api/get-user-by-username/:username', getUserByUsername)
+
     // gets all users from database
     app.get('/api/get-all-users', getAllUsers)
 
     // updates a user with a specific user id
-    app.put('/api/update-user/:uid', updateUser)
+    app.put('/api/update-user-by-id/:uid', updateUserById)
+    //
+    // updates a user with a specific user id
+    app.put('/api/update-user-by-username/:username', updateUserById)
     
     // deletes a user with a specific user id
-    app.delete('/api/delete-user/:uid', deleteUser)
+    app.delete('/api/delete-user-by-id/:uid', deleteUserById)
+    
+    // deletes a user with a specific user id
+    app.delete('/api/delete-user-by-username/:uid', deleteUserByUsername)
 
 }
 
 /* 
     Creates a new user in the database.
     The following fields are assumed to be included in the body of the post request: 
-        Username
-        Email
-        Password
+        username
+        email
+        password
         isAdmin
 */
 
@@ -42,9 +51,15 @@ const createUser = (req, res) => {
 
 
 // Gets a user with the given user id
-const getUser = (req, res) => {
+const getUserByID = (req, res) => {
     const userID = req.params.uid
     const user = users.find((user) => user._id === userID)
+    res.json(user)
+}
+
+const getUserByUsername = (req, res) => {
+    const username = req.params.username
+    const user = users.find((user) => user.username === username)
     res.json(user)
 }
 
@@ -57,16 +72,30 @@ const getAllUsers = (req, res) => {
     Updates a user in the database with the provided userID as a parameter
     The changes are sent in the body of the HTTP request 
 */
-const updateUser = (req, res) => {
+const updateUserById = (req, res) => {
     const userID = req.params.uid
     const updates = req.body
     users = users.map((user) => user._id === userID ? {...user, ...updates} : user)
     res.sendStatus(200);
 }
 
+const updateUserByUsername = (req, res) => {
+    const username = req.params.username
+    const updates = req.body
+    users = users.map((user) => user.username === username ? {...user, ...updates} : user)
+    res.sendStatus(200);
+}
+
 // Deletes a user in the database with the provided postID as a parameter
-const deleteUser = (req, res) => {
+const deleteUserById = (req, res) => {
     const userID = req.params.uid
     users = users.filter((user) => user._id !== userID)
+    res.sendStatus(200);
+}
+//
+// Deletes a user in the database with the provided postID as a parameter
+const deleteUserByUsername = (req, res) => {
+    const username = req.params.username
+    users = users.filter((user) => user.username !== username)
     res.sendStatus(200);
 }
