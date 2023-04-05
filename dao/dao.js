@@ -2,23 +2,30 @@ import postsModel from "../models/posts-model.js";
 import usersModel from "../models/users-model.js";
 
 export const getAllPosts = async () => {
-    postsModel.find()
+    return postsModel.find()
 }
 
 export const getPost = async (postID) => {
-    postsModel.find({_id: postID})
+    return postsModel.find({_id: postID})
 }
 
 export const createPost = async (post) => {
-    postsModel.create(post)
+    /*try {
+        return postsModel.create(post)
+    } catch (e) {
+        return e
+    }
+    */
+    return postsModel.create(post)
 }
 
-export const editPost = async (pid, post) => {
-    postsModel.updateOne({_id: pid}, {$set: post})
+export const updatePost = async (pid, post) => {
+    return postsModel.updateOne({_id: pid}, {$set: post})
 }
+
 
 export const deletePost = async (pid) => {
-    postsModel.deleteOne({_id: pid})
+    return postsModel.deleteOne({_id: pid})
 }
 
 
@@ -26,33 +33,33 @@ export const deletePost = async (pid) => {
 
 
 export const getAllUsers = async() => {
-   usersModel.find() 
+   return usersModel.find() 
 }
 
 export const getUser = async(userID) => {
-    usersModel.find({_id: userID})
+    return usersModel.find({_id: userID})
 }
 
 export const getUserByUsername = async(username) => {
-    usersModel.find({username: username})
+    return usersModel.find({username: username})
 }
 
 export const createUser = async (user) => {
-    usersModel.create(user)
+    return usersModel.create(user)
 }
 
-export const editUserById = async (uid, user) => {
-    usersModel.updateOne({_id: uid}, {$set: user})
+export const updateUserById = async (uid, user) => {
+    return usersModel.updateOne({_id: uid}, {$set: user})
 }
 
-export const editUserByUsername = async (username, user) => {
-    usersModel.updateOne({username: username}, {$set: user})
+export const updateUserByUsername = async (username, user) => {
+    return usersModel.updateOne({username: username}, {$set: user})
 }
 
 export const deleteUserById = async (uid) => {
-    usersModel.deleteOne({_id: uid})
+    return usersModel.deleteOne({_id: uid})
 }
 
 export const deleteUserByUsername = async (username) => {
-    usersModel.deleteOne({username: username})
+    return usersModel.deleteOne({username: username})
 }

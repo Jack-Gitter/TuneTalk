@@ -50,6 +50,7 @@ const getPost = async (req, res) => {
 // retrieves all posts in the database
 const getAllPosts = async (req, res) => {
     const posts = await dao.getAllPosts()
+    console.log(posts)
     res.json(posts)
 }
 
@@ -60,13 +61,13 @@ const getAllPosts = async (req, res) => {
 const updatePost = async (req, res) => {
     const postID = req.params.pid
     const changes = req.body;
-    const status = await dao.updatePost(postID, changes)
-    res.sendStatus(status);
+    const statusObj = await dao.updatePost(postID, changes)
+    res.json(statusObj);
 }
 
 // Deletes a post in the database with the provided postID as a parameter
 const deletePost = async (req, res) => {
     const postID = req.params.pid
-    const status = await dao.deletePost(postID)
-    res.sendStatus(status);
+    const statusObj = await dao.deletePost(postID)
+    res.json(statusObj);
 }

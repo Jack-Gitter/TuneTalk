@@ -74,27 +74,27 @@ const getAllUsers = async (req, res) => {
 const updateUserById = async (req, res) => {
     const userID = req.params.uid
     const updates = req.body
-    const status = await dao.updateUserById(userID, updates)
-    res.sendStatus(status);
+    const statusObj = await dao.updateUserById(userID, updates)
+    res.json(statusObj);
 }
 
 const updateUserByUsername = async (req, res) => {
     const username = req.params.username
     const updates = req.body
-    const status = await dao.updateUserByUsername(username, updates)
-    res.sendStatus(status);
+    const statusObj = await dao.updateUserByUsername(username, updates)
+    res.json(statusObj);
 }
 
 // Deletes a user in the database with the provided postID as a parameter
 const deleteUserById = async (req, res) => {
     const userID = req.params.uid
-    const status = await dao.deleteUserById(userID)
-    res.sendStatus(status);
+    const statusObj = await dao.deleteUserById(userID)
+    res.json(statusObj);
 }
 //
 // Deletes a user in the database with the provided postID as a parameter
 const deleteUserByUsername = async (req, res) => {
     const username = req.params.username
-    const status = await dao.deleteUserByUsername(username)
-    res.sendStatus(status);
+    const statusObj = await dao.deleteUserByUsername(username)
+    res.sendStatus(statusObj);
 }
