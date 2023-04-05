@@ -25,7 +25,7 @@ export const userController = (app) => {
     app.delete('/api/delete-user-by-id/:uid', deleteUserById)
     
     // deletes a user with a specific user id
-    app.delete('/api/delete-user-by-username/:uid', deleteUserByUsername)
+    app.delete('/api/delete-user-by-username/:username', deleteUserByUsername)
 
 }
 
