@@ -36,9 +36,8 @@ export const postController = (app) => {
 const createPost = async (req, res) => {
     const newPost = req.body;
     newPost.likes = 0;
-    let status = {}
-    status = await dao.createPost(newPost).catch((e) => {res.status(400).json(e); return})
-    res.json(status);
+    const post = await dao.createPost(newPost).catch((e) => {res.status(400).json(e); return})
+    res.json(post);
 }
 
 // Gets a post from the datbase with the provided postID as a parameter 

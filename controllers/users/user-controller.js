@@ -24,7 +24,62 @@ export const userController = (app) => {
     
     // deletes a user with a specific user id
     app.delete('/api/delete-user-by-username/:username', deleteUserByUsername)
+    
+    // logs a user in and returns the user back 
+    app.post('/api/login', login)
+    
+    // reigsters a user and returns the user back
+    app.post('/api/register', register)
+    
+    // get the current user logged in 
+    app.get('/api/get-current-user', getCurrentUser)
 
+    // logout the current user (remove cookies from server store)
+    app.post('/api/logout', logout)
+    
+}
+
+const logout = (req, res) => {
+    console.log(req.session)
+    if (req.session.user) {
+        req.session.destroy();
+        res.sendStatus(200)
+        return
+    }
+    res.sendStatus(400)
+}
+const getCurrentUser = (req, res) => {
+    console.log(req.session)
+    if (req.session.user === null) {
+        res.sendStatus(400)
+        return
+    } else {
+        res.json(req.session.user)
+    }
+}
+
+// endpoint to log in. Body is expected to have username, password, and email fields
+const login = async (req, res) => {
+    console.log(req.session)
+    const user = await dao.getUserByParams(req.body)
+    if (user === null) {
+        res.sendStatus(400)
+        return
+    }
+    req.session['user'] = user
+    res.json(user)
+}
+
+const register = async (req, res) => {
+    console.log(req.session)
+    const user = await dao.getUserByUsername(req.body.username)
+    if (user !== null) {
+        res.sendStatus(400)
+        return
+    }
+    const newUser = await dao.createUser(req.body).catch((e) => {res.status(400).json(e); return})
+    req.session['user'] = newUser
+    res.json(newUser)
 }
 
 /* 
@@ -42,8 +97,8 @@ const createUser = async (req, res) => {
     newUser.following = []
     newUser.likedPosts = []
     newUser.posts = []
-    const status = await dao.createUser(newUser).catch((e) => {res.status(400).json(e); return})
-    res.json(status);
+    const user = await dao.createUser(newUser).catch((e) => {res.status(400).json(e); return})
+    res.json(user);
 }
 
 

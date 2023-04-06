@@ -12,6 +12,9 @@ export const deletePost = async (pid) => await postsModel.deleteOne({_id: pid})
 export const getAllUsers = async() => await usersModel.find()
 export const getUserByID = async(userID) => await usersModel.findById(userID)
 export const getUserByUsername = async(username) => await usersModel.findOne({username: username})
+export const getUserByParams = async(user) => await usersModel.findOne({
+    username: user.username, password: user.password, email: user.email 
+})
 export const createUser = async (user) => await usersModel.create(user)
 export const updateUserById = async (uid, user) => await usersModel.updateOne({_id: uid}, {$set: user})
 export const updateUserByUsername = async (username, user) => await usersModel.updateOne({username: username}, {$set: user})
