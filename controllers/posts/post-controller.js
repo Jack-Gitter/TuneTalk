@@ -16,8 +16,10 @@ export const postController = (app) => {
     
     // deletes a post with a specific post id
     app.delete('/api/delete-post/:pid', deletePost)
+    
 
 }
+
 
 /* 
     Creates a new post and inserts into the database

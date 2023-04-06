@@ -25,22 +25,56 @@ export const userController = (app) => {
     // deletes a user with a specific user id
     app.delete('/api/delete-user-by-username/:username', deleteUserByUsername)
     
-    // logs a user in and returns the user back 
+    // logs a user in 
     app.post('/api/login', login)
     
-    // reigsters a user and returns the user back
+    // registers a user
     app.post('/api/register', register)
     
-    // get the current user logged in 
+    // gets the current user that is logged in
     app.get('/api/get-current-user', getCurrentUser)
 
-    // logout the current user (remove cookies from server store)
+    // logs the current user out
     app.post('/api/logout', logout)
     
+    
+    app.get('/api/user-posts-by-id/:uid', userPostsByID)
+
+    app.get('/api/user-posts-by-username/:username', userPostsByUsername)
 }
 
+const userPostsByID = async (req, res) => {
+    console.log(req)
+    let user = {}
+    try {
+        user = await dao.getUserByID(req.params.uid)
+    } catch {
+        res.sendStatus(400)
+        return
+    }
+    const posts = await Promise.all(user.posts.map(async (postID) => await dao.getPost(postID)))
+    res.json(posts)
+}
+
+const userPostsByUsername = async (req, res) => {
+    let user = {}
+    try {
+        user = await dao.getUserByUsername(req.params.username)
+    } catch {
+        res.sendStatus(400)
+        return
+    }
+    if (user === null) {
+        res.sendStatus(400)
+        return
+    }
+    const posts = await Promise.all(user.posts.map(async (postID) => await dao.getPost(postID)))
+    res.json(posts)
+}
+
+
+//Logs the current user out
 const logout = (req, res) => {
-    console.log(req.session)
     if (req.session.user) {
         req.session.destroy();
         res.sendStatus(200)
@@ -48,8 +82,9 @@ const logout = (req, res) => {
     }
     res.sendStatus(400)
 }
+
+// gets the current user logged in 
 const getCurrentUser = (req, res) => {
-    console.log(req.session)
     if (req.session.user === null) {
         res.sendStatus(400)
         return
@@ -58,9 +93,16 @@ const getCurrentUser = (req, res) => {
     }
 }
 
-// endpoint to log in. Body is expected to have username, password, and email fields
+/*
+
+    Logs a user in.
+    Required fields in the body are:
+    username
+    password
+    email
+    
+*/
 const login = async (req, res) => {
-    console.log(req.session)
     const user = await dao.getUserByParams(req.body)
     if (user === null) {
         res.sendStatus(400)
@@ -71,7 +113,6 @@ const login = async (req, res) => {
 }
 
 const register = async (req, res) => {
-    console.log(req.session)
     const user = await dao.getUserByUsername(req.body.username)
     if (user !== null) {
         res.sendStatus(400)
