@@ -48,6 +48,7 @@ export const userController = (app) => {
     app.get('/api/user-following-by-username/:username', userFollowingByUsername)
 
     app.get('/api/user-liked-posts-by-username/:username', userLikedByUsername)
+    
 }
 
 const userLikedByUsername = async (req, res) => {
