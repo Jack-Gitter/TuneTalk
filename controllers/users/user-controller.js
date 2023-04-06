@@ -46,6 +46,25 @@ export const userController = (app) => {
     app.get('/api/user-followers-by-username/:username', userFollowersByUsername)
 
     app.get('/api/user-following-by-username/:username', userFollowingByUsername)
+
+    app.get('/api/user-liked-posts-by-username/:username', userLikedByUsername)
+}
+
+const userLikedByUsername = async (req, res) => {
+    let user = {}
+    try {
+        user = await dao.getUserByUsername(req.params.username)
+    } catch {
+        res.sendStatus(400)
+        return
+    }
+    if (user === null) {
+        res.sendStatus(400)
+        return
+    }
+    const liked = await Promise.all(user.likedPosts.map(async (postID) => await dao.getPost(postID)))
+    res.json(liked)
+
 }
 
 const userFollowingByUsername = async (req, res) => {
