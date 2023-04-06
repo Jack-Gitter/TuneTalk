@@ -5,16 +5,16 @@ export const userController = (app) => {
     app.post('/api/create-user', createUser)
 
     // get a user with the provided username
-    app.get('/api/get-user-by-username/:username', getUserByUsername)
+    app.get('/api/get-user/:username', getUserByUsername)
 
     // gets all users from database
     app.get('/api/get-all-users', getAllUsers)
 
     // updates a user with a specific user id
-    app.put('/api/update-user-by-username/:username', updateUserByUsername)
+    app.put('/api/update-user/:username', updateUserByUsername)
     
     // deletes a user with a specific user id
-    app.delete('/api/delete-user-by-username/:username', deleteUserByUsername)
+    app.delete('/api/delete-user/:username', deleteUserByUsername)
     
     // logs a user in 
     app.post('/api/login', login)
@@ -28,18 +28,21 @@ export const userController = (app) => {
     // logs the current user out
     app.post('/api/logout', logout)
     
-    //app.get('/api/user-posts-by-id/:uid', userPostsByID)
+    // gets the posts of a user given their username
+    app.get('/api/get-user-posts/:username', userPostsByUsername)
 
-    app.get('/api/user-posts-by-username/:username', userPostsByUsername)
+    // gets the followers of a user given their username
+    app.get('/api/get-user-followers/:username', userFollowersByUsername)
+    
+    // gets the following of a user by their username
+    app.get('/api/get-user-following/:username', userFollowingByUsername)
 
-    app.get('/api/user-followers-by-username/:username', userFollowersByUsername)
-
-    app.get('/api/user-following-by-username/:username', userFollowingByUsername)
-
-    app.get('/api/user-liked-posts-by-username/:username', userLikedByUsername)
+    // gets the liked posts of a user by their username
+    app.get('/api/get-user-liked/:username', userLikedByUsername)
     
 }
 
+// gets a users liked posts given their username
 const userLikedByUsername = async (req, res) => {
     let user = {}
     try {
@@ -57,6 +60,7 @@ const userLikedByUsername = async (req, res) => {
 
 }
 
+// gets a following given their username
 const userFollowingByUsername = async (req, res) => {
     let user = {}
     try {
@@ -73,6 +77,7 @@ const userFollowingByUsername = async (req, res) => {
     res.json(following)
 }
 
+// gets a users followers given their username
 const userFollowersByUsername = async (req, res) => {
     let user = {}
     try {
@@ -89,8 +94,7 @@ const userFollowersByUsername = async (req, res) => {
     res.json(followers)
 }
 
-
-
+// gets a users posts given their username
 const userPostsByUsername = async (req, res) => {
     let user = {}
     try {
