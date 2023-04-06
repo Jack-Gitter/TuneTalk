@@ -37,14 +37,48 @@ export const userController = (app) => {
     // logs the current user out
     app.post('/api/logout', logout)
     
-    
     app.get('/api/user-posts-by-id/:uid', userPostsByID)
 
     app.get('/api/user-posts-by-username/:username', userPostsByUsername)
+    
+    app.get('/api/user-followers-by-id/:uid', userFollowersByID)
+
+    app.get('/api/user-followers-by-username/:username', userFollowersByUsername)
+
 }
 
+const userFollowersByID = async (req, res) => {
+    let user = {}
+    try {
+        user = await dao.getUserByID(req.params.uid)
+    } catch {
+        res.sendStatus(400)
+        return
+    }
+    const followers = await Promise.all(user.followers.map(async (fUsername) => await dao.getUserByUsername(fUsername)))
+    res.json(followers)
+}
+
+
+
+const userFollowersByUsername = async (req, res) => {
+    let user = {}
+    try {
+        user = await dao.getUserByUsername(req.params.username)
+    } catch {
+        res.sendStatus(400)
+        return
+    }
+    if (user === null) {
+        res.sendStatus(400)
+        return
+    }
+    const followers = await Promise.all(user.followers.map(async (fUsername) => await dao.getUserByUsername(fUsername)))
+    res.json(followers)
+}
+
+
 const userPostsByID = async (req, res) => {
-    console.log(req)
     let user = {}
     try {
         user = await dao.getUserByID(req.params.uid)

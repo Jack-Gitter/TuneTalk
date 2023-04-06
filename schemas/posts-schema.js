@@ -9,6 +9,7 @@ const postsSchema = mongoose.Schema({
     albumArt: String,
     spotifyURI: String,
     spotifyID: String,
+    likes: Number,
 }, {collection: 'posts'})
 
 export default postsSchema
