@@ -10,12 +10,6 @@ export const getPost = async (postID) => {
 }
 
 export const createPost = async (post) => {
-    /*try {
-        return postsModel.create(post)
-    } catch (e) {
-        return e
-    }
-    */
     return postsModel.create(post)
 }
 
