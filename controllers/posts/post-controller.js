@@ -36,7 +36,7 @@ export const postController = (app) => {
 const createPost = async (req, res) => {
     const newPost = req.body;
     newPost.likes = 0;
-    const status = await dao.createPost(newPost)
+    const status = await dao.createPost(newPost).catch((e) => res.json(e))
     res.json(status);
 }
 
