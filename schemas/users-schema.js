@@ -5,10 +5,10 @@ const usersSchema = mongoose.Schema({
     password: {type: String, required: true},
     isAdmin: {type: Boolean, required: true},
     email: {type: String, required: true, unique: true},
-    followers: {type: Array, required: true},
-    following: {type: Array, required: true},
-    likedPosts: {type: Array, required: true},
-    posts: {type: Array, required: true}
+    followers: [String],
+    following: [String],
+    likedPosts: [String],
+    posts: [String]
 }, {collection: 'users'})
 
 export default usersSchema
