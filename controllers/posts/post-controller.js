@@ -20,7 +20,6 @@ export const postController = (app) => {
 
 }
 
-
 /* 
     Creates a new post and inserts into the database
     Returns the newly inserted post in JSON form

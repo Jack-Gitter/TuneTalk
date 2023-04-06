@@ -5,9 +5,9 @@ const usersSchema = mongoose.Schema({
     password: {type: String, required: true},
     isAdmin: {type: Boolean, required: true},
     email: {type: String, required: true},
-    followers: [String],
-    following: [String],
-    likedPosts: [String],
+    followers: [String], // username
+    following: [String], // username
+    likedPosts: [String], // postID
     posts: [String]
 }, {collection: 'users'})
 
