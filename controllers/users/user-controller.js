@@ -7,14 +7,23 @@ export const userController = (app) => {
     // get a user with the provided id
     app.get('/api/get-user-by-id/:uid', getUserByID)
     
+    // get a user with the provided username
+    app.get('/api/get-user-by-username/:username', getUserByUsername)
+
     // gets all users from database
     app.get('/api/get-all-users', getAllUsers)
 
     // updates a user with a specific user id
     app.put('/api/update-user-by-id/:uid', updateUserById)
+    //
+    // updates a user with a specific user id
+    app.put('/api/update-user-by-username/:username', updateUserByUsername)
     
     // deletes a user with a specific user id
     app.delete('/api/delete-user-by-id/:uid', deleteUserById)
+    
+    // deletes a user with a specific user id
+    app.delete('/api/delete-user-by-username/:username', deleteUserByUsername)
 
 }
 
@@ -33,7 +42,7 @@ const createUser = async (req, res) => {
     newUser.following = []
     newUser.likedPosts = []
     newUser.posts = []
-    const status = await dao.createUser(newUser).catch((e) => res.status(400).json(e))
+    const status = await dao.createUser(newUser).catch((e) => {res.status(400).json(e); return})
     res.json(status);
 }
 
@@ -41,14 +50,23 @@ const createUser = async (req, res) => {
 // Gets a user with the given user id
 const getUserByID = async (req, res) => {
     const userID = req.params.uid
-    const user = await dao.getUserByID(userID).catch((e) => res.status(400).json(e))
+    const user = await dao.getUserByID(userID).catch((e) => {res.status(400).json(e); return})
     res.json(user)
 }
 
+const getUserByUsername = async (req, res) => {
+    const username = req.params.username
+    const user = await dao.getUserByUsername(username).catch((e) => {res.status(400).json(e); return})
+    if (user === null) {
+        res.sendStatus(400)
+        return
+    }
+    res.json(user)
+}
 
 // Gets all users 
 const getAllUsers = async (req, res) => {
-    const users = await dao.getAllUsers().catch((e) => res.status(400).json(e))
+    const users = await dao.getAllUsers().catch((e) => {res.status(400).json(e); return})
     res.json(users)
 
 }
@@ -60,15 +78,27 @@ const getAllUsers = async (req, res) => {
 const updateUserById = async (req, res) => {
     const userID = req.params.uid
     const updates = req.body
-    const statusObj = await dao.updateUserById(userID, updates).catch((e) => res.status(400).json(e))
+    const statusObj = await dao.updateUserById(userID, updates).catch((e) => {res.status(400).json(e); return})
     res.json(statusObj);
 }
 
+const updateUserByUsername = async (req, res) => {
+    const username = req.params.username
+    const updates = req.body
+    const statusObj = await dao.updateUserByUsername(username, updates).catch((e) => {res.status(400).json(e); return})
+    res.json(statusObj);
+}
 
 // Deletes a user in the database with the provided postID as a parameter
 const deleteUserById = async (req, res) => {
     const userID = req.params.uid
-    const statusObj = await dao.deleteUserById(userID).catch((e) => res.status(400).json(e))
+    const statusObj = await dao.deleteUserById(userID).catch((e) => {res.status(400).json(e); return})
     res.json(statusObj);
 }
-
+//
+// Deletes a user in the database with the provided postID as a parameter
+const deleteUserByUsername = async (req, res) => {
+    const username = req.params.username
+    const statusObj = await dao.deleteUserByUsername(username).catch((e) => {res.status(400).json(e); return})
+    res.json(statusObj);
+}

@@ -1,15 +1,27 @@
 import express from 'express'
 import cors from 'cors'
 import mongoose from 'mongoose';
+import session from 'express-session'
 
 import { postController } from './controllers/posts/post-controller.js';
 import { userController } from './controllers/users/user-controller.js';
 
 const app = express()
+
 const CONNECTION_STRING = process.env.DB_CONNECTION_STRING || 'mongodb://127.0.0.1:27017/WebdevFinal'
 
-app.use(cors())
+app.use(cors(
+    {
+        credential: true,
+    }
+))
 app.use(express.json())
+app.set('trust proxy', 1)
+app.use(session({
+    secret: 'secret',
+    resave: true, 
+    saveUninitialized: true,
+}))
 
 postController(app)
 userController(app)
