@@ -242,6 +242,8 @@ const updateUserByUsername = async (req, res) => {
         res.sendStatus(400)
         return
     }
+    const newUser = {...req.session.user, ...updates}
+    req.session.user = newUser
     res.json(statusObj);
 }
 
