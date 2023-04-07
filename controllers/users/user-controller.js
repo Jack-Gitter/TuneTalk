@@ -261,5 +261,13 @@ const deleteUserByUsername = async (req, res) => {
         res.sendStatus(400)
         return
     }
+    // if we delete the currently signed in user, we want to end the session
+    //console.log(req.session.user.username)
+    console.log(req.session.user)
+    console.log(req.session.user.username)
+    console.log(req.params.username)
+    if (!req.session.user !== undefined && req.session.user.username === req.params.username) {
+        req.session.destroy()
+    }
     res.json(statusObj);
 }
