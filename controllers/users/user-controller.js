@@ -47,8 +47,8 @@ const userLikedByUsername = async (req, res) => {
     let user = {}
     try {
         user = await dao.getUserByUsername(req.params.username)
-    } catch {
-        res.sendStatus(400)
+    } catch (e) {
+        res.status(400).json(e)
         return
     }
     if (user === null) {
@@ -65,8 +65,8 @@ const userFollowingByUsername = async (req, res) => {
     let user = {}
     try {
         user = await dao.getUserByUsername(req.params.username)
-    } catch {
-        res.sendStatus(400)
+    } catch (e){
+        res.status(400).json(e)
         return
     }
     if (user === null) {
@@ -82,8 +82,8 @@ const userFollowersByUsername = async (req, res) => {
     let user = {}
     try {
         user = await dao.getUserByUsername(req.params.username)
-    } catch {
-        res.sendStatus(400)
+    } catch (e) {
+        res.status(400).json(e)
         return
     }
     if (user === null) {
@@ -99,8 +99,8 @@ const userPostsByUsername = async (req, res) => {
     let user = {}
     try {
         user = await dao.getUserByUsername(req.params.username)
-    } catch {
-        res.sendStatus(400)
+    } catch (e) {
+        res.status(400).json(e)
         return
     }
     if (user === null) {
@@ -124,7 +124,7 @@ const logout = (req, res) => {
 
 // gets the current user logged in 
 const getCurrentUser = (req, res) => {
-    if (req.session.user === null) {
+    if (req.session.user === undefined) {
         res.sendStatus(400)
         return
     } else {
@@ -157,7 +157,13 @@ const register = async (req, res) => {
         res.sendStatus(400)
         return
     }
-    const newUser = await dao.createUser(req.body).catch((e) => {res.status(400).json(e); return})
+    let newUser = {}
+    try {
+        newUser = await dao.createUser(req.body)
+    } catch (e) {
+        res.status(400).json(e)
+        return
+    }
     req.session['user'] = newUser
     res.json(newUser)
 }
@@ -177,14 +183,26 @@ const createUser = async (req, res) => {
     newUser.following = []
     newUser.likedPosts = []
     newUser.posts = []
-    const user = await dao.createUser(newUser).catch((e) => {res.status(400).json(e); return})
+    let user = {}
+    try {
+        user = await dao.createUser(newUser)
+    } catch (e) {
+        res.status(400).json(e)
+        return
+    }
     res.json(user);
 }
 
 
 const getUserByUsername = async (req, res) => {
     const username = req.params.username
-    const user = await dao.getUserByUsername(username).catch((e) => {res.status(400).json(e); return})
+    let user = {}
+    try {
+        user = await dao.getUserByUsername(username)
+    } catch (e) {
+        res.status(400).json(e)
+        return
+    }
     if (user === null) {
         res.sendStatus(400)
         return
@@ -194,7 +212,13 @@ const getUserByUsername = async (req, res) => {
 
 // Gets all users 
 const getAllUsers = async (req, res) => {
-    const users = await dao.getAllUsers().catch((e) => {res.status(400).json(e); return})
+    let users = {} 
+    try {
+        users = await dao.getAllUsers()
+    } catch (e) {
+        res.status(400).json(e)
+        return
+    }
     res.json(users)
 
 }
@@ -207,13 +231,33 @@ const getAllUsers = async (req, res) => {
 const updateUserByUsername = async (req, res) => {
     const username = req.params.username
     const updates = req.body
-    const statusObj = await dao.updateUserByUsername(username, updates).catch((e) => {res.status(400).json(e); return})
+    let statusObj = {}
+    try {
+        statusObj = await dao.updateUserByUsername(username, updates)
+    } catch (e) {
+        res.status(400).json(e)
+        return
+    }
+    if (statusObj.acknowledged === false) {
+        res.sendStatus(400)
+        return
+    }
     res.json(statusObj);
 }
 
 // Deletes a user in the database with the provided username as a parameter
 const deleteUserByUsername = async (req, res) => {
     const username = req.params.username
-    const statusObj = await dao.deleteUserByUsername(username).catch((e) => {res.status(400).json(e); return})
+    let statusObj = {}
+    try {
+        statusObj = await dao.deleteUserByUsername(username)
+    } catch (e) {
+        res.status(400).json(e)
+        return
+    }
+    if (statusObj.deletedCount === 0) {
+        res.sendStatus(400)
+        return
+    }
     res.json(statusObj);
 }
