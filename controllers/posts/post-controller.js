@@ -95,7 +95,6 @@ const updatePost = async (req, res) => {
             await dao.changeUserWhoPosted(postID, changes.username)
 
             if (req.session.user !== undefined && changes.username == req.session.user.username) {
-                console.log(req.session.user)
                 if (req.session.user.posts.indexOf(oldPost._id.toString()) === -1) {
                     req.session.user.posts.push(oldPost._id)
                 }
@@ -109,7 +108,6 @@ const updatePost = async (req, res) => {
             }
         }
     } catch (e){
-        console.log(e)
         res.status(400).json(e)
         return
     }
@@ -124,6 +122,8 @@ const updatePost = async (req, res) => {
 const deletePost = async (req, res) => {
     const postID = req.params.pid
     const post = await dao.getPost(postID)
+    console.log('post is')
+    console.log(post)
     let statusObj = {}
     try {
         statusObj = await dao.deletePost(postID)
@@ -132,12 +132,11 @@ const deletePost = async (req, res) => {
         if (req.session.user !== undefined && post.username === req.session.user.username) {
            let idx = req.session.user.posts.indexOf(postID) 
             if (idx !== -1) {
-                req.session.user.splice(idx, 1)
+                req.session.user.posts.splice(idx, 1)
             }
         }
 
     } catch (e) {
-        console.log(e)
         res.status(400).json(e)
         return
     }
