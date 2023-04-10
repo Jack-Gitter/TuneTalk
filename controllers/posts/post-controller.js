@@ -16,7 +16,6 @@ export const postController = (app) => {
     
     // deletes a post with a specific post id
     app.delete('/api/delete-post/:pid', deletePost)
-    
 
 }
 
@@ -45,6 +44,11 @@ const createPost = async (req, res) => {
         res.status(400).json(e)
         return
     }
+    // update the current user and make sure that they get a new post 
+    if (req.session.user !== undefined) {
+        req.session.user.posts.push(post._id)
+    }
+
     res.json(post);
 }
 
@@ -79,6 +83,9 @@ const getAllPosts = async (req, res) => {
 */
 const updatePost = async (req, res) => {
     const postID = req.params.pid
+    
+    const oldPost = await dao.getPost(postID)
+
     const changes = req.body;
     let statusObj = {}
     try {
@@ -86,8 +93,23 @@ const updatePost = async (req, res) => {
         
         if (changes.username !== undefined) {
             await dao.changeUserWhoPosted(postID, changes.username)
+
+            if (req.session.user !== undefined && changes.username == req.session.user.username) {
+                console.log(req.session.user)
+                if (req.session.user.posts.indexOf(oldPost._id.toString()) === -1) {
+                    req.session.user.posts.push(oldPost._id)
+                }
+            }
+
+            if (req.session.user !== undefined && oldPost.username === req.session.user.username) {
+                let idx = req.session.user.posts.indexOf(oldPost._id.toString())
+                if (idx !== -1) {
+                    req.session.user.posts.splice(idx, 1)
+                }
+            }
         }
     } catch (e){
+        console.log(e)
         res.status(400).json(e)
         return
     }
@@ -101,10 +123,19 @@ const updatePost = async (req, res) => {
 // Deletes a post in the database with the provided postID as a parameter
 const deletePost = async (req, res) => {
     const postID = req.params.pid
+    const post = await dao.getPost(postID)
     let statusObj = {}
     try {
         statusObj = await dao.deletePost(postID)
         await dao.deletePostFromUser(postID)
+        
+        if (req.session.user !== undefined && post.username === req.session.user.username) {
+           let idx = req.session.user.posts.indexOf(postID) 
+            if (idx !== -1) {
+                req.session.user.splice(idx, 1)
+            }
+        }
+
     } catch (e) {
         console.log(e)
         res.status(400).json(e)
