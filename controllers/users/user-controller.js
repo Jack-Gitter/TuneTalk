@@ -138,7 +138,6 @@ const getCurrentUser = (req, res) => {
     Required fields in the body are:
     username
     password
-    email
     
 */
 const login = async (req, res) => {
@@ -171,10 +170,14 @@ const register = async (req, res) => {
 /* 
     Creates a new user in the database.
     The following fields are assumed to be included in the body of the post request: 
-        username
-        email
-        password
-        isAdmin
+    username: (required)
+    password: (required)
+    isAdmin: (required)
+    email: (required)
+    followers:
+    following: 
+    likedPosts: 
+    posts: 
 */
 
 const createUser = async (req, res) => {
