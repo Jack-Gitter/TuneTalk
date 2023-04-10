@@ -45,7 +45,7 @@ const createPost = async (req, res) => {
         return
     }
     // update the current user and make sure that they get a new post 
-    if (req.session.user !== undefined) {
+    if (req.session.user !== undefined && req.session.user.username === newPost.username) {
         req.session.user.posts.push(post._id)
     }
 
@@ -122,8 +122,6 @@ const updatePost = async (req, res) => {
 const deletePost = async (req, res) => {
     const postID = req.params.pid
     const post = await dao.getPost(postID)
-    console.log('post is')
-    console.log(post)
     let statusObj = {}
     try {
         statusObj = await dao.deletePost(postID)
