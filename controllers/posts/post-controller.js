@@ -87,6 +87,11 @@ const likePost = async (req, res) => {
 const createPost = async (req, res) => {
     const newPost = req.body;
     newPost.likes = 0;
+    
+    if (newPost.username === undefined) {
+        newPost.username = req.session.user.username
+    }
+
     let post = {}
     try {
         post = await dao.createPost(newPost)
