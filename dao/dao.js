@@ -26,3 +26,13 @@ export const updateOtherUsersFollow = async (old_username, new_username) =>  {
     await usersModel.updateMany({following: old_username}, {$set: {"following.$": new_username}})
 
 }
+
+export const updateWhoOtherUsersFollowDAO = async (username, followers) => {
+        await usersModel.updateMany({username: {$in: followers}}, {$addToSet: {following: username}})
+        await usersModel.updateMany({username: {$nin: followers}}, {$pull: {following: username}})
+}
+
+export const updateOtherUsersFollowersDAO = async (username, following) => {
+        await usersModel.updateMany({username: {$in: following}}, {$addToSet: {followers: username}})
+        await usersModel.updateMany({username: {$nin: following}}, {$pull: {followers: username}})
+}

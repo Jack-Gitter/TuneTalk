@@ -239,10 +239,19 @@ const updateOtherUsersFollow = async (old_username, updates) => {
     await dao.updateOtherUsersFollow(old_username, new_username)
 }
 
+const updateWhoOtherUsersFollow = async (username, updates) => {
+    const followers = updates.followers
+    await dao.updateWhoOtherUsersFollowDAO(username, followers)
+}
+
+const updateOtherUsersFollowers = async (username, updates) => {
+    const following = updates.following 
+    await dao.updateOtherUsersFollowersDAO(username, following)
+}
+
 const updateUserByUsername = async (req, res) => {
     const username = req.params.username
     const updates = req.body
-    console.log(updates)
     let statusObj = {}
     try {
         statusObj = await dao.updateUserByUsername(username, updates)
@@ -251,6 +260,15 @@ const updateUserByUsername = async (req, res) => {
         if (updates.username !== undefined) {
             await updateOtherUsersFollow(username, updates)
             await updatePostsUsername(username, updates)
+        }
+       
+        // if a user changes who is following them, make sure this is reflected in the other users as well
+        if (updates.followers !== undefined) {
+            await updateWhoOtherUsersFollow(username, updates)
+        }
+        
+        if (updates.following !== undefined) {
+            await updateOtherUsersFollowers(username, updates)
         }
 
     } catch (e) {
