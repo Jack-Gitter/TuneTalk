@@ -103,9 +103,15 @@ const deletePost = async (req, res) => {
     const postID = req.params.pid
     let statusObj = {}
     try {
-        statusObj = await dao.deletePost(postID).catch((e) => {res.status(400).json(e); return})
+        statusObj = await dao.deletePost(postID)
+        await dao.deletePostFromUser(postID)
     } catch (e) {
+        console.log(e)
         res.status(400).json(e)
+        return
+    }
+    if (statusObj.deletedCount === 0) {
+        res.sendStatus(400)
         return
     }
     res.json(statusObj);

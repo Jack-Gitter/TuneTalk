@@ -15,6 +15,10 @@ export const updatePostLikesDAO = async (username, likedPosts) => {
     await postsModel.updateMany({username: {$nin: followers}}, {$pull: {following: username}})
 }
 
+export const deletePostFromUser = async (postID) => {
+    await usersModel.updateMany({$pull: {posts: postID}})
+}
+
 export const deleteUsersPosts = async (username) => {
     await postsModel.deleteMany({username: username})
 }
