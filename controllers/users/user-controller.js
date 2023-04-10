@@ -292,6 +292,7 @@ const deleteUserByUsername = async (req, res) => {
     let statusObj = {}
     try {
         statusObj = await dao.deleteUserByUsername(username)
+        await dao.deleteUsersPosts(username)
     } catch (e) {
         res.status(400).json(e)
         return
@@ -300,11 +301,9 @@ const deleteUserByUsername = async (req, res) => {
         res.sendStatus(400)
         return
     }
-    // if we delete the currently signed in user, we want to end the session
+    
+    // if we delete the currently signed in user, we want to end the session and delete their posts
     //console.log(req.session.user.username)
-    console.log(req.session.user)
-    console.log(req.session.user.username)
-    console.log(req.params.username)
     if (req.session.user !== undefined && req.session.user.username === req.params.username) {
         req.session.destroy()
     }
