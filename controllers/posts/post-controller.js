@@ -40,6 +40,7 @@ const createPost = async (req, res) => {
     let post = {}
     try {
         post = await dao.createPost(newPost)
+        await dao.assignPostToUser(newPost.username, post._id)
     } catch (e) {
         res.status(400).json(e)
         return
@@ -82,6 +83,10 @@ const updatePost = async (req, res) => {
     let statusObj = {}
     try {
         statusObj = await dao.updatePost(postID, changes)
+        
+        if (changes.username !== undefined) {
+            await dao.changeUserWhoPosted(postID, changes.username)
+        }
     } catch (e){
         res.status(400).json(e)
         return

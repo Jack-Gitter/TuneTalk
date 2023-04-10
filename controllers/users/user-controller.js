@@ -249,6 +249,7 @@ const updateOtherUsersFollowers = async (username, updates) => {
     await dao.updateOtherUsersFollowersDAO(username, following)
 }
 
+
 const updateUserByUsername = async (req, res) => {
     const username = req.params.username
     const updates = req.body
@@ -270,7 +271,7 @@ const updateUserByUsername = async (req, res) => {
         if (updates.following !== undefined) {
             await updateOtherUsersFollowers(username, updates)
         }
-
+        
     } catch (e) {
         res.status(400).json(e)
         return

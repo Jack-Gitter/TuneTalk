@@ -8,7 +8,7 @@ const usersSchema = mongoose.Schema({
     followers: [String], // username
     following: [String], // username
     likedPosts: [String], // postID
-    posts: [String]
+    posts: [String] // for posts that there ids are not in this array, if the username is the current username, delete
 }, {collection: 'users'})
 
 export default usersSchema

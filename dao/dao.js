@@ -10,6 +10,19 @@ export const deletePost = async (pid) => await postsModel.deleteOne({_id: pid})
 export const updatePostsUsername = async (old_username, new_username) => 
         await postsModel.updateMany({username: old_username}, {username: new_username})
 
+export const updatePostLikesDAO = async (username, likedPosts) => {
+    await postsModel.updateMany({username: {$in: followers}}, {$addToSet: {following: username}})
+    await postsModel.updateMany({username: {$nin: followers}}, {$pull: {following: username}})
+}
+
+export const assignPostToUser = async (username, postID) => {
+    await usersModel.updateOne({username: username}, {$addToSet: {posts: postID}})
+}
+
+export const changeUserWhoPosted = async (postID, username) => {
+    await usersModel.updateOne({username: username}, {$addToSet: {posts: postID}})
+    await usersModel.updateMany({username: {$ne: username}}, {$pull: {posts: postID}})
+}
 // USERS METHODS START
 
 export const getAllUsers = async() => await usersModel.find()
