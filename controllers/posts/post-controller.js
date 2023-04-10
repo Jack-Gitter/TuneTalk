@@ -16,9 +16,60 @@ export const postController = (app) => {
     
     // deletes a post with a specific post id
     app.delete('/api/delete-post/:pid', deletePost)
+    
+    // adds a like to the post, and updates the current users 
+    app.put('/api/like-post/:pid', likePost)
+    
+    // unlikes the post with the post id
+    app.put('/api/unlike-post/:pid', unlikePost)
 
 }
 
+const unlikePost = async (req, res) => {
+    const postID = req.params.pid
+    const currentPost = await dao.getPost(postID)
+    currentPost.likes -=1
+    await dao.updatePost(postID, currentPost)
+
+    // update the current user likes with the postID
+    if (req.session.user !== undefined) {
+        const current_username = req.session.user.username
+        const current_user = await dao.getUserByUsername(current_username)
+
+        let idx = current_user.likedPosts.indexOf(postID)
+        if (idx !== -1) {
+            current_user.likedPosts.splice(idx, 1)
+            await dao.updateUserByUsername(current_username, current_user)
+            req.session.user.likedPosts.splice(idx, 1)
+        }
+    }
+
+    res.sendStatus(200)
+}
+
+const likePost = async (req, res) => {
+
+    const postID = req.params.pid
+    const currentPost = await dao.getPost(postID)
+    currentPost.likes += 1
+    await dao.updatePost(postID, currentPost)
+
+    // update the current user likes with the postID
+    if (req.session.user !== undefined) {
+        const current_username = req.session.user.username
+        const current_user = await dao.getUserByUsername(current_username)
+        let idx = current_user.likedPosts.indexOf(postID)
+        if (idx === -1) {
+            current_user.likedPosts.push(postID)
+            await dao.updateUserByUsername(current_username, current_user)
+            req.session.user.likedPosts.push(postID)
+        }
+        
+    }
+
+    res.sendStatus(200)
+
+}
 /* 
     Creates a new post and inserts into the database
     Returns the newly inserted post in JSON form
@@ -126,11 +177,17 @@ const deletePost = async (req, res) => {
     try {
         statusObj = await dao.deletePost(postID)
         await dao.deletePostFromUser(postID)
+        await dao.deletePostFromUserLikedPosts(postID)
         
         if (req.session.user !== undefined && post.username === req.session.user.username) {
            let idx = req.session.user.posts.indexOf(postID) 
             if (idx !== -1) {
                 req.session.user.posts.splice(idx, 1)
+            }
+            let idx2 = req.session.user.likedPosts.indexOf(postID)
+            console.log(idx2)
+            if (idx2 !== -1) {
+                req.session.user.likedPosts.splice(idx2, 1)
             }
         }
 
