@@ -74,14 +74,14 @@ const likePost = async (req, res) => {
     Creates a new post and inserts into the database
     Returns the newly inserted post in JSON form
     The following fields are assumed to be included in the body of the post request: 
-        songTitle
+        songTitle (required)
+        review  (required)
         username (if no username is provided, its assumed to be the current user)
         artists
         genre
         albumArt
         spotifyURI
         spotifyID
-        review 
 */
 
 const createPost = async (req, res) => {
