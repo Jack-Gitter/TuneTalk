@@ -228,12 +228,31 @@ const getAllUsers = async (req, res) => {
     The changes are sent in the body of the HTTP request 
 */
 
+    
+const updatePostsUsername = async (old_username, updates) => {
+    const new_username = updates.username
+    await dao.updatePostsUsername(old_username, new_username)
+}
+
+const updateOtherUsersFollow = async (old_username, updates) => {
+    const new_username = updates.username
+    await dao.updateOtherUsersFollow(old_username, new_username)
+}
+
 const updateUserByUsername = async (req, res) => {
     const username = req.params.username
     const updates = req.body
+    console.log(updates)
     let statusObj = {}
     try {
         statusObj = await dao.updateUserByUsername(username, updates)
+        
+        // if the user changed their username, update associated records in users and posts collections
+        if (updates.username !== undefined) {
+            await updateOtherUsersFollow(username, updates)
+            await updatePostsUsername(username, updates)
+        }
+
     } catch (e) {
         res.status(400).json(e)
         return
@@ -242,7 +261,7 @@ const updateUserByUsername = async (req, res) => {
         res.sendStatus(400)
         return
     }
-    if (!req.session.user !== undefined && req.session.user.username === req.params.username) {
+    if (req.session.user !== undefined && req.session.user.username === req.params.username) {
         req.session.user = {...req.session.user, ...updates}
     }
     res.json(statusObj);
@@ -267,7 +286,7 @@ const deleteUserByUsername = async (req, res) => {
     console.log(req.session.user)
     console.log(req.session.user.username)
     console.log(req.params.username)
-    if (!req.session.user !== undefined && req.session.user.username === req.params.username) {
+    if (req.session.user !== undefined && req.session.user.username === req.params.username) {
         req.session.destroy()
     }
     res.json(statusObj);
