@@ -49,6 +49,10 @@ export const userController = (app) => {
 
 const followUser = async (req, res) => {
 
+    if (req.session.user === undefined) {
+        res.sendStatus(400)
+        return
+    }
     const old_current_user = req.session.user;
     try {
         const userToFollow = req.params.username 
@@ -57,7 +61,6 @@ const followUser = async (req, res) => {
         await dao.updateUserByUsername(currentUser.username, currentUser)
         await updateOtherUsersFollowers(currentUser.username, currentUser)
     } catch (e) {
-        console.log(e)
         req.session.user = old_current_user;
         res.sendStatus(400)
         return
@@ -66,6 +69,10 @@ const followUser = async (req, res) => {
 }
 
 const unfollowUser = async (req, res) => {
+    if (req.session.user === undefined) {
+        res.sendStatus(400)
+        return
+    }
     const old_current_user = req.session.user;
     try {
         const userToFollow = req.params.username 
