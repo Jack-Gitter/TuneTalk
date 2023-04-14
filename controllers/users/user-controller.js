@@ -40,7 +40,51 @@ export const userController = (app) => {
     // gets the liked posts of a user by their username
     app.get('/api/get-user-liked/:username', userLikedByUsername)
     
+    app.put('/api/follow-user/:username', followUser)
+    
+    app.put('/api/unfollow-user/:username', unfollowUser)
+    
 }
+
+
+const followUser = async (req, res) => {
+
+    const old_current_user = req.session.user;
+    try {
+        const userToFollow = req.params.username 
+        const currentUser = req.session.user
+        currentUser.following.push(userToFollow)
+        await dao.updateUserByUsername(currentUser.username, currentUser)
+        await updateOtherUsersFollowers(currentUser.username, currentUser)
+    } catch (e) {
+        console.log(e)
+        req.session.user = old_current_user;
+        res.sendStatus(400)
+        return
+    }
+    res.sendStatus(200)
+}
+
+const unfollowUser = async (req, res) => {
+    const old_current_user = req.session.user;
+    try {
+        const userToFollow = req.params.username 
+        const currentUser = req.session.user
+        const idx = currentUser.following.indexOf(userToFollow)
+        if (idx !== -1) {
+            currentUser.following.splice(idx, 1)
+            console.log(currentUser.following)
+            await dao.updateUserByUsername(currentUser.username, currentUser)
+            await updateOtherUsersFollowers(currentUser.username, currentUser)
+        }
+    } catch (e) {
+        req.session.user = old_current_user;
+        res.sendStatus(400)
+        return
+    }
+    res.sendStatus(200)
+}
+
 
 // gets a users liked posts given their username
 const userLikedByUsername = async (req, res) => {
