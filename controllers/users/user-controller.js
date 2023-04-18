@@ -40,8 +40,10 @@ export const userController = (app) => {
     // gets the liked posts of a user by their username
     app.get('/api/get-user-liked/:username', userLikedByUsername)
     
+    // follows a user with the given username for the currently logged in user
     app.put('/api/follow-user/:username', followUser)
     
+    // unfollows a user with the given username for the curerntly logged in user
     app.put('/api/unfollow-user/:username', unfollowUser)
     
 }
