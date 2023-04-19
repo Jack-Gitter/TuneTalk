@@ -177,6 +177,7 @@ const logout = (req, res) => {
 
 // gets the current user logged in 
 const getCurrentUser = (req, res) => {
+    console.log(req.session)
     if (req.session.user === undefined) {
         res.sendStatus(400)
         return
@@ -200,6 +201,7 @@ const login = async (req, res) => {
         return
     }
     req.session['user'] = user
+    console.log(req.session['user'])
     res.json(user)
 }
 
