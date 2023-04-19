@@ -20,7 +20,6 @@ app.use(session({
     secret: 'secret',
     resave: true, 
     saveUninitialized: true,
-    cookie: {sameSite: false, secure: false}
 }))
 
 app.set('trust proxy', 1)
