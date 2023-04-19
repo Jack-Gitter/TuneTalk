@@ -12,7 +12,7 @@ const CONNECTION_STRING = process.env.DB_CONNECTION_STRING || 'mongodb://127.0.0
 
 app.use(cors(
     {
-        credential: true,
+        credentials: true,
     }
 ))
 app.use(express.json())
