@@ -179,7 +179,7 @@ const logout = (req, res) => {
 const getCurrentUser = (req, res) => {
     console.log('in get-current-user, current session is: ')
     console.log(req.session)
-    if (req.session.user === undefined) {
+    if (req.session['user'] === undefined) {
         res.sendStatus(400)
         return
     } else {
