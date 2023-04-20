@@ -5,6 +5,7 @@ const usersSchema = mongoose.Schema({
     password: {type: String, required: true},
     isAdmin: {type: Boolean, required: true},
     email: {type: String, required: true},
+    profilePicture: String,
     followers: [String], // username
     following: [String], // username
     likedPosts: [String], // postID  This field will not update the like counts on posts if changed, must be done client side

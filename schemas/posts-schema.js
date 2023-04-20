@@ -6,6 +6,7 @@ const postsSchema = mongoose.Schema({
     username: {type: String, required: true},
     rating: {type: Number, min: 0, max: 5, required: true},
     artists: Array,
+    time: String,
     genre: String,
     albumArt: String,
     spotifyURI: String,
