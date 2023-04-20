@@ -2,7 +2,7 @@ import * as dao from '../../dao/dao.js'
 
 export const postController = (app) => {
     
-    // creates a new user
+    // creates a new post
     app.post('/api/create-post', createPost)
 
     // gets a post with a specific post id

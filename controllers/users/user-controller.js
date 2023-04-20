@@ -344,7 +344,9 @@ const updateUserByUsername = async (req, res) => {
     if (req.session.user !== undefined && req.session.user.username === req.params.username) {
         req.session.user = {...req.session.user, ...updates}
     }
-    res.json(statusObj);
+    let search_username = req.body.username === undefined ? username : req.body.username
+    let user = await dao.getUserByUsername(search_username)
+    res.json(user);
 }
 
 // Deletes a user in the database with the provided username as a parameter
