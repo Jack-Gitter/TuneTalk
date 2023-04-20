@@ -171,7 +171,9 @@ const updatePost = async (req, res) => {
         res.sendStatus(400)
         return
     }
-    res.json(statusObj);
+    
+    let newPost = await dao.getPost(postID)
+    res.json(newPost);
 }
 
 // Deletes a post in the database with the provided postID as a parameter
