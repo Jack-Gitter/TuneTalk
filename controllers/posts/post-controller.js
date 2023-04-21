@@ -87,6 +87,10 @@ const likePost = async (req, res) => {
 const createPost = async (req, res) => {
     const newPost = req.body;
     newPost.likes = 0;
+    if (req.session.user === undefined) {
+        res.sendStatus(400)
+        return
+    }
     newPost.username = req.session.user.username
 
     let post = {}
