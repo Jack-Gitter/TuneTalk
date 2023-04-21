@@ -95,7 +95,7 @@ const createPost = async (req, res) => {
     let post = {}
     try {
         post = await dao.createPost(newPost)
-        await dao.assignPostToUser(newPost.username, post._id)
+        //await dao.assignPostToUser(newPost.username, post._id)
     } catch (e) {
         res.status(400).json(e)
         return
