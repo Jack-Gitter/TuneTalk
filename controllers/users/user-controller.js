@@ -58,6 +58,13 @@ const followUser = async (req, res) => {
     const old_current_user = req.session.user;
     try {
         const userToFollow = req.params.username 
+
+        const temp = await dao.getUserByUsername(userToFollow)
+        if (temp === null) {
+            res.sendStatus(400);
+            return
+        }
+
         const currentUser = req.session.user
         currentUser.following.push(userToFollow)
         await dao.updateUserByUsername(currentUser.username, currentUser)
@@ -78,6 +85,11 @@ const unfollowUser = async (req, res) => {
     const old_current_user = req.session.user;
     try {
         const userToFollow = req.params.username 
+        const temp = await dao.getUserByUsername(userToFollow)
+        if (temp === null) {
+            res.sendStatus(400);
+            return
+        }
         const currentUser = req.session.user
         const idx = currentUser.following.indexOf(userToFollow)
         if (idx !== -1) {
