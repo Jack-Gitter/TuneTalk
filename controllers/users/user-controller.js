@@ -46,6 +46,31 @@ export const userController = (app) => {
     // unfollows a user with the given username for the curerntly logged in user
     app.put('/api/unfollow-user/:username', unfollowUser)
     
+    app.get('/api/get-posts-from-following/:username', getPostsfromFollowing)
+    
+}
+
+
+const getPostsfromFollowing = async (req, res) => {
+
+    const username = req.params.username
+    const user = await dao.getUserByUsername(username);
+    const following = user.following
+    let postIDs = []
+    let posts = []
+    
+    for (let i = 0; i < following.length; i++) {
+        let user_followed = await dao.getUserByUsername(following[i])
+        postIDs = postIDs.concat(user_followed.posts);
+    }
+   
+    
+    for (let i = 0; i < postIDs.length; i++) {
+        let post = await dao.getPost(postIDs[i]);
+        posts.push(post)
+    }
+
+    res.json(posts);
 }
 
 
