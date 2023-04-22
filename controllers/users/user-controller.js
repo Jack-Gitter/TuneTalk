@@ -61,6 +61,11 @@ const getPostsfromFollowing = async (req, res) => {
     }
 
     const user = await dao.getUserByUsername(username);
+    
+    if (user === null || user === undefined) {
+        res.sendStatus(400)
+        return
+    }
     const following = user.following
     let postIDs = []
     let posts = []
