@@ -54,6 +54,12 @@ export const userController = (app) => {
 const getPostsfromFollowing = async (req, res) => {
 
     const username = req.params.username
+    
+    if (username === null || username === undefined) {
+        res.sendStatus(400)
+        return
+    }
+
     const user = await dao.getUserByUsername(username);
     const following = user.following
     let postIDs = []
@@ -63,7 +69,6 @@ const getPostsfromFollowing = async (req, res) => {
         let user_followed = await dao.getUserByUsername(following[i])
         postIDs = postIDs.concat(user_followed.posts);
     }
-   
     
     for (let i = 0; i < postIDs.length; i++) {
         let post = await dao.getPost(postIDs[i]);
