@@ -104,6 +104,7 @@ const followUser = async (req, res) => {
         currentUser.following.push(userToFollow)
         await dao.updateUserByUsername(currentUser.username, currentUser)
         await updateOtherUsersFollowers(currentUser.username, currentUser)
+        req.session.user = currentUser;
     } catch (e) {
         req.session.user = old_current_user;
         res.sendStatus(400)
@@ -133,6 +134,7 @@ const unfollowUser = async (req, res) => {
             await dao.updateUserByUsername(currentUser.username, currentUser)
             await updateOtherUsersFollowers(currentUser.username, currentUser)
         }
+        req.session.user = currentUser
     } catch (e) {
         req.session.user = old_current_user;
         res.sendStatus(400)
