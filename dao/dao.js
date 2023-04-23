@@ -6,7 +6,7 @@ export const getPost = async (postID) => await postsModel.findById(postID)
 export const createPost = async (post) => await postsModel.create(post)
 export const updatePost = async (pid, post) => await postsModel.updateOne({_id: pid}, post)
 export const deletePost = async (pid) => await postsModel.deleteOne({_id: pid})
-
+export const getPostByTrackID = async (trackID) => await postsModel.find({spotifyID: trackID})
 export const updatePostsUsername = async (old_username, new_username) => 
         await postsModel.updateMany({username: old_username}, {username: new_username})
 

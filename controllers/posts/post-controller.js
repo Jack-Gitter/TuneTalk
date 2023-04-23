@@ -22,9 +22,18 @@ export const postController = (app) => {
     
     // unlikes the post with the post id
     app.put('/api/unlike-post/:pid', unlikePost)
+    
+    app.get('/api/get-post-by-track-id/:trackID', getPostByTrackID)
 
 }
 
+
+const getPostByTrackID = async (req, res) => {
+   const trackID = req.params.trackID 
+   const tracks = await dao.getPostByTrackID(trackID) 
+    return res.json(tracks)
+
+}
 const unlikePost = async (req, res) => {
     const postID = req.params.pid
     const currentPost = await dao.getPost(postID)
