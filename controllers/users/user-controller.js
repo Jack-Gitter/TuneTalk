@@ -48,7 +48,48 @@ export const userController = (app) => {
     
     app.get('/api/get-posts-from-following/:username', getPostsfromFollowing)
     
+    app.get('/api/get-posts-from-following-trackID/:trackID', getPostsfromFollowingTrackID)
+    
 }
+
+const getPostsfromFollowingTrackID = async (req, res) => {
+
+    if (req.session.user === null || req.session.user === undefined) {
+        res.sendStatus(400)
+        return
+    }
+    
+    const username = req.session.user.username;
+    const tID = req.params.trackID
+    const user = await dao.getUserByUsername(username);
+    
+    if (user === null || user === undefined) {
+        res.sendStatus(400)
+        return
+    }
+
+    const following = user.following
+    let postIDs = []
+    let posts = []
+    
+    for (let i = 0; i < following.length; i++) {
+        let user_followed = await dao.getUserByUsername(following[i])
+        postIDs = postIDs.concat(user_followed.posts);
+    }
+    
+    for (let i = 0; i < postIDs.length; i++) {
+        let post = await dao.getPost(postIDs[i]);
+        if (post.spotifyID === tID) {
+            posts.push(post)
+        }
+    }
+
+    res.json(posts);
+    
+    
+}
+
+
 
 
 const getPostsfromFollowing = async (req, res) => {

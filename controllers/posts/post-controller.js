@@ -24,6 +24,7 @@ export const postController = (app) => {
     app.put('/api/unlike-post/:pid', unlikePost)
     
     app.get('/api/get-post-by-track-id/:trackID', getPostByTrackID)
+    
 
 }
 
