@@ -217,5 +217,5 @@ const deletePost = async (req, res) => {
         res.sendStatus(400)
         return
     }
-    res.json(statusObj);
+    res.json(post);
 }
