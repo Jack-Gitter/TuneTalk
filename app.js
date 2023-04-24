@@ -13,7 +13,7 @@ const app = express()
 app.use(cors(
     {
         credentials: true,
-        origin: ['http://localhost:3000', 'https://main--cs4550tunetalk.netlify.app/']
+        origin: ['http://localhost:3000', 'https://main--cs4550tunetalk.netlify.app']
     }
 ))
 app.set("trust proxy", 1);
