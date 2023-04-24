@@ -16,14 +16,14 @@ app.use(cors(
         origin: ['http://localhost:3000', 'https://main--cs4550tunetalk.netlify.app/']
     }
 ))
+app.set("trust proxy", 1);
 app.use(session({
     secret: 'secret',
     resave: true, 
     saveUninitialized: true,
+    cookie: {secure: true}
 }))
 
-//app.set('trust proxy', 1)
-app.enable("trust proxy");
 app.use(express.json())
 
 postController(app)
