@@ -54,7 +54,7 @@ const unlikePost = async (req, res) => {
         }
     }
 
-    res.sendStatus(200)
+    res.json(currentPost)
 }
 
 const likePost = async (req, res) => {
@@ -77,7 +77,7 @@ const likePost = async (req, res) => {
         
     }
 
-    res.sendStatus(200)
+    res.json(currentPost)
 
 }
 /* 

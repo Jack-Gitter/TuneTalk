@@ -83,6 +83,13 @@ const getPostsfromFollowingTrackID = async (req, res) => {
             posts.push(post)
         }
     }
+    
+    for (let i = 0; i < user.posts; i++) {
+        let post = await dao.getPost(user.posts[i])
+        if (post.spotifyID === tID) {
+            posts.push(post)
+        }
+    }
 
     res.json(posts);
     
