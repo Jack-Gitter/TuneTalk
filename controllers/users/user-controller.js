@@ -74,6 +74,9 @@ const getPostsfromFollowingTrackID = async (req, res) => {
     
     for (let i = 0; i < following.length; i++) {
         let user_followed = await dao.getUserByUsername(following[i])
+        if (user_followed === null) {
+            continue
+        }
         postIDs = postIDs.concat(user_followed.posts);
     }
     
@@ -84,8 +87,10 @@ const getPostsfromFollowingTrackID = async (req, res) => {
         }
     }
     
-    for (let i = 0; i < user.posts; i++) {
+    for (let i = 0; i < user.posts.length; i++) {
+        console.log('hi')
         let post = await dao.getPost(user.posts[i])
+        console.log(post)
         if (post.spotifyID === tID) {
             posts.push(post)
         }
