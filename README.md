@@ -4,25 +4,18 @@ Tune Talk
 
 ## Description
 
-Application for 
+A project written in Typescript and React for Webdev captstone course. It is a music social media site where anyone can create an account, and share music via the Spotify API with friends!
+
 ## Getting Started
 
-The website is currently awaiting approval from spotify to become public.
-For access to the website now, please email jack.a.gitter@gmail.com so I can put you on the approve-list
-
-
-### Executing program
-
-This website is hosted on netlify and render. It is privately available via the instructions above
-
+please visit https://main--cs4550tunetalk.netlify.app/ for a working demo
 
 ## Authors
 
-Jack Gitter
-
-https://www.linkedin.com/in/jack-gitter/
-
-
+Jack Gitter: https://www.linkedin.com/in/jack-gitter/
+Russel Montalbano
+Gaberial Ribeiro
 
 
-Please visit https://main--cs4550tunetalk.netlify.app/ for a demo of the hosted site
+
+
